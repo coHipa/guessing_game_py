@@ -26,6 +26,8 @@ def main():
             little_enemy = Enemy(hp=10, dmg=5)
             attack_little(player, little_enemy)
 
+        attack_boss(player, boss_enemy)
+
 
 def attack_little(player, enemy):
     secret_number = random.randint(1, 10)
@@ -37,6 +39,24 @@ def attack_little(player, enemy):
     else:
         player.hp -= enemy.dmg
         print("Your guess was wrong, you're hit {0} HP left".format(player.hp))
+
+
+def attack_boss(player, enemy):
+    secret_number = random.randint(1, 50)
+
+    while enemy.hp > 0 and player.hp > 0:
+        player_guess = int(input("You have to fight a boss (1-50) "))
+
+        if player_guess > secret_number:
+            player.hp -= enemy.dmg
+            print("Your guess was to high, your HP: {0}\n".format(player.hp))
+        elif player_guess < secret_number:
+            player.hp -= enemy.dmg
+            print("Your guess was to low, your HP: {0}\n".format(player.hp))
+        else:
+            enemy.hp -= player.dmg
+            print("You guessed right and hit the boss, remaining HP: {0}".format(enemy.hp))
+            secret_number = random.randint(1, 50)
 
 
 if __name__ == "__main__":
