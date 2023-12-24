@@ -25,7 +25,7 @@ def main():
     player_name = input("Enter your name: ")
     player = Player(player_name, hp=100, dmg=10)
     print("Guess through hell\n")
-    print("{0} you wake up in hell and have to guess your way out.".format(player.name))
+    print("{player.name} you wake up in hell and have to guess your way out.")
 
     while player.is_alive():
         enemy_count = random.randint(1, 5)
@@ -58,10 +58,10 @@ def attack_boss(player, enemy):
 
         if player_guess > secret_number:
             player.hp -= enemy.dmg
-            print("Your guess was to high, your HP: {0}\n".format(player.hp))
+            print("Your guess was to high, your HP: {player.hp}\n")
         elif player_guess < secret_number:
             player.hp -= enemy.dmg
-            print("Your guess was to low, your HP: {0}\n".format(player.hp))
+            print("Your guess was to low, your HP: {player.hp}\n")
         else:
             enemy.hp -= player.dmg
             print("You guessed right and hit the boss, remaining HP: {enemy.hp}")
