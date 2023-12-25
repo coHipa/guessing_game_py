@@ -2,13 +2,21 @@ import random
 
 
 class Player:
-    def __init__(self, name, hp, dmg):
+    def __init__(self, name, hp=100, dmg=10):
         self.name = name
         self.hp = hp
         self.dmg = dmg
+        self.correct_guesses = 0
+        self.critical_dmg = 0
 
     def is_alive(self):
         return self.hp > 0
+    
+    def update_dmg(self):
+        self.dmg = 10 + self.critical_dmg
+    
+    def increase_critical_dmg(self):
+        self.critical_dmg = int(self.dmg * (random.randint(20, 50) / 100))
 
 
 class Enemy:
@@ -22,8 +30,9 @@ class Enemy:
 
 
 def main():
+    HITS_TO_CRIT = 4
     player_name = input("Enter your name: ")
-    player = Player(player_name, hp=100, dmg=10)
+    player = Player(player_name)
     print("Guess through hell\n")
     print("{player.name} you wake up in hell and have to guess your way out.")
 
