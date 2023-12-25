@@ -41,8 +41,8 @@ def main():
 def attack_little(player, enemy):
     secret_number = random.randint(1, 10)
 
-    player_guess = int(input("{player.name}, fast attack that little enemy (1-10) "))
-    if player_guess == secret_number:
+    print("{player.name}, attack this little enemy, fast (1-10)")
+    if valid_guess() == secret_number:
         enemy.hp -= player.dmg
         print("You killed that guy.\n")
     else:
@@ -54,18 +54,27 @@ def attack_boss(player, enemy):
     secret_number = random.randint(1, 50)
 
     while enemy.is_alive() and player.is_alive():
-        player_guess = int(input("You have to fight against {enemy.name} (1-50) "))
+        print("You have to fight against {enemy.name} (1-50)\n")
 
-        if player_guess > secret_number:
+        if valid_guess() > secret_number:
             player.hp -= enemy.dmg
             print("Your guess was to high, your HP: {player.hp}\n")
-        elif player_guess < secret_number:
+        elif valid_guess() < secret_number:
             player.hp -= enemy.dmg
             print("Your guess was to low, your HP: {player.hp}\n")
         else:
             enemy.hp -= player.dmg
             print("You guessed right and hit the boss, remaining HP: {enemy.hp}")
             secret_number = random.randint(1, 50)
+
+
+def valid_guess():
+    while True:
+        user_input = input("Make your guess: ")
+        if user_input.isdigit():
+            return int(user_input)
+        else:
+            print("Unvalid input.\n")
 
 
 if __name__ == "__main__":
