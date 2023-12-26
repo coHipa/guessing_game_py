@@ -10,6 +10,9 @@ alway working on little changes as I learn something new. So everything can be m
 
 - more player dmg
   - ~~crit-system~~
+  - weapon buffs
+    - crit-hit
+    - crit-chance
 
 ## Future ideas
 - Loot
