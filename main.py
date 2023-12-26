@@ -7,17 +7,17 @@ class Player:
         self.hp = hp
         self.dmg = dmg
         self.correct_guesses = 0
+        self.critical_dmg = 0
         self.hits_to_crit = 4
-        self.critical_dmg = 1
 
     def is_alive(self):
         return self.hp > 0
     
     def update_dmg(self):
-        self.dmg + self.critical_dmg
+        self.dmg = 10 + self.critical_dmg
     
     def increase_critical_dmg(self):
-        self.critical_dmg = int(self.dmg * (random.randint(20, 50) / 100))
+        self.critical_dmg = 1 * int(self.dmg * (random.randint(20, 50) / 100) + 10)
 
 
 class Enemy:
@@ -49,11 +49,10 @@ def main():
 
 def attack_minor(player, enemy):
     secret_number = random.randint(1, 10)
-
     print(f"{player.name}, attack this little enemy, fast (1-10)")
+
     if valid_guess() == secret_number:
-        critical_logic(player)
-        enemy.hp -= player.dmg
+        hit_enemy(player, enemy)
         print("You killed that guy.\n")
     else:
         player.hp -= enemy.dmg
@@ -65,26 +64,28 @@ def attack_boss(player, enemy):
     print(f"You have to fight against {enemy.name} (1-50)\n")
 
     while enemy.is_alive() and player.is_alive():
-
-        if valid_guess() > secret_number:
+        player_guess = valid_guess()
+        if player_guess > secret_number:
             player.hp -= enemy.dmg
             print(f"Your guess was to high, your HP: {player.hp}\n")
-        elif valid_guess() < secret_number:
+        elif player_guess < secret_number:
             player.hp -= enemy.dmg
             print(f"Your guess was to low, your HP: {player.hp}\n")
         else:
-            critical_logic(player)
-            enemy.hp -= player.dmg
+            hit_enemy(player, enemy)
             print(f"You guessed right and hit the boss, remaining HP: {enemy.hp}")
             secret_number = random.randint(1, 50)
 
 
-def critical_logic(player):
+def hit_enemy(player, enemy):
     player.correct_guesses += 1
     if player.correct_guesses == player.hits_to_crit:
-        print("Your hit is a crit")
+        print("This was a critical hit")
         player.increase_critical_dmg()
+        enemy.hp -= player.critical_dmg
         player.correct_guesses = 0
+    else:
+        enemy.hp -= player.dmg
 
 
 def valid_guess():
