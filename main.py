@@ -1,21 +1,22 @@
 import random
+import os
 
 
 class Player:
-    def __init__(self, name, hp=100, dmg=10):
+    def __init__(self, name, hp=100, dmg=10, crit_chance=0.1):
         self.name = name
         self.hp = hp
         self.dmg = dmg
         self.correct_guesses = 0
         self.critical_dmg = 0
-        self.hits_to_crit = 4
+        self.crit_chance = crit_chance
 
     def is_alive(self):
         return self.hp > 0
-    
+
     def update_dmg(self):
         self.dmg = 10 + self.critical_dmg
-    
+
     def increase_critical_dmg(self):
         self.critical_dmg = 1 * int(self.dmg * (random.randint(20, 50) / 100) + 10)
 
@@ -24,7 +25,9 @@ class Enemy:
     def __init__(self, hp, dmg):
         self.hp = hp
         self.dmg = dmg
-        self.name = random.choice(["Vergil", "Malenia", "C'Thun", "Baal", "Wizpig", "The Nameless"])
+        self.name = random.choice(
+            ["Vergil", "Malenia", "C'Thun", "Baal", "Wizpig", "The Nameless"]
+        )
 
     def is_alive(self):
         return self.hp > 0
@@ -45,6 +48,10 @@ def main():
             attack_minor(player, minor_enemy)
 
         attack_boss(player, boss_enemy)
+
+        print("Nice fight, but you are not out yet.")
+        input("Press any key")
+        os.system("cls" if os.name == "nt" else "clear")
 
 
 def attack_minor(player, enemy):
@@ -78,12 +85,10 @@ def attack_boss(player, enemy):
 
 
 def hit_enemy(player, enemy):
-    player.correct_guesses += 1
-    if player.correct_guesses == player.hits_to_crit:
+    if random.random() < player.crit_chance:
         print("This was a critical hit")
         player.increase_critical_dmg()
         enemy.hp -= player.critical_dmg
-        player.correct_guesses = 0
     else:
         enemy.hp -= player.dmg
 
