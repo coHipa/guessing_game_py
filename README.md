@@ -9,7 +9,7 @@ Maybe I continue my work on the "original" Rust version.
 alway working on little changes as I learn something new. So everything can be moved or changed in future versions.
 
 - more player dmg
-  - crit-system
+  - ~~crit-system~~
 
 ## Future ideas
 - Loot
