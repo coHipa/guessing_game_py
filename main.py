@@ -7,7 +7,6 @@ class Player:
         self.name = name
         self.health = health
         self.damage = damage
-        self.correctGuesses = 0
         self.criticalDamage = 0
         self.critChance = critChance
 
@@ -34,16 +33,24 @@ class Enemy:
 
 
 def main():
+    while True:
+        gameLoop()
+        userInput = input("Enter '666' to exit the game, press any key to return to battle.")
+        if userInput == "666":
+            break
+
+
+def gameLoop():
+    print("Guess through hell\n")
     playerName = input("Enter your name: ")
     player = Player(playerName)
-    print("Guess through hell\n")
     print(f"{player.name} you wake up in hell and have to guess your way out.")
 
     while player.isAlive():
         enemyCount = random.randint(1, 5)
         bossEnemy = Enemy(health=100, damage=20)
 
-        for i in range(enemyCount):
+        for _ in range(enemyCount):
             minorEnemy = Enemy(health=15, damage=5)
             attackMinor(player, minorEnemy)
 
@@ -59,7 +66,7 @@ def attackMinor(player, enemy):
     print(f"{player.name}, attack this little enemy, fast (1-10)")
 
     if validGuess() == secretNumber:
-        hitEnemy(player, enemy)
+        attackEnemy(player, enemy)
         print("You killed that guy.\n")
     else:
         player.health -= enemy.damage
@@ -72,21 +79,16 @@ def attackBoss(player, enemy):
 
     while enemy.isAlive() and player.isAlive():
         playerGuess = validGuess()
-        if playerGuess > secretNumber:
+        if playerGuess != secretNumber:
             player.health -= enemy.damage
-            print(f"Your guess was to high, your health: {player.health}\n")
-        elif playerGuess < secretNumber:
-            player.health -= enemy.damage
-            print(f"Your guess was to low, your health: {player.health}\n")
+            print(f"Your guess {"was to high" if playerGuess > secretNumber else "to low"}, your health: {player.health}")
         else:
-            hitEnemy(player, enemy)
-            print(
-                f"You guessed right and hit the boss, remaining health: {enemy.health}"
-            )
+            attackEnemy(player, enemy)
+            print(f"You guessed right and hit the boss, remaining health: {enemy.health}")
             secretNumber = random.randint(1, 50)
 
 
-def hitEnemy(player, enemy):
+def attackEnemy(player, enemy):
     if random.random() < player.critChance:
         print("This was a critical hit")
         player.increaseCriticalDamage()
@@ -100,6 +102,9 @@ def validGuess():
         userInput = input("Make your guess: ")
         if userInput.isdigit():
             return int(userInput)
+        elif userInput == "666":
+            print("You stay in hell")
+            exit()
         else:
             print("Unvalid input.\n")
 
