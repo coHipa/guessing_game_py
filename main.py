@@ -19,6 +19,16 @@ class Player:
     def increaseCriticalDamage(self):
         self.criticalDamage = 1 * int(self.damage * (random.randint(20, 50) / 100) + 10)
 
+    def buffWeapon(self):
+        print("You defeated a boss. Now it's time to choose.")
+        buffChoice = input("Do you want to buff your weapon? (y/n) ").lower()
+
+        if buffChoice == "y":
+            self.damage += random.randint(1, 5)
+            self.critChance += random.uniform(0.05, 0.1)
+            print(f"Base damage increased to {self.damage}.")
+            print(f"Critical hit chance increased to {self.critChance * 100}%.")
+
 
 class Enemy:
     def __init__(self, health, damage):
@@ -90,6 +100,9 @@ def attackBoss(player, enemy):
             attackEnemy(player, enemy)
             print(f"You guessed right and hit the boss, remaining health: {enemy.health}")
             secretNumber = random.randint(1, 50)
+
+        if player.isAlive():
+            player.buffWeapon()
 
 
 def attackEnemy(player, enemy):
