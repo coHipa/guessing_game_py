@@ -47,13 +47,11 @@ def gameLoop():
     print(f"{player.name} you wake up in hell and have to guess your way out.")
 
     while player.isAlive():
-        enemyCount = random.randint(1, 5)
+        
+        minorEnemy = Enemy(health=15, damage=5)
+        attackMinor(player, minorEnemy)
+
         bossEnemy = Enemy(health=100, damage=20)
-
-        for _ in range(enemyCount):
-            minorEnemy = Enemy(health=15, damage=5)
-            attackMinor(player, minorEnemy)
-
         attackBoss(player, bossEnemy)
 
         print("Nice fight, but you are not out yet.")
@@ -62,20 +60,26 @@ def gameLoop():
 
 
 def attackMinor(player, enemy):
-    secretNumber = random.randint(1, 10)
-    print(f"{player.name}, attack this little enemy, fast (1-10)")
+    enemyCount = random.randint(1, 5)
 
-    if validGuess() == secretNumber:
-        attackEnemy(player, enemy)
-        print("You killed that guy.\n")
-    else:
-        player.health -= enemy.damage
-        print(f"Your guess was wrong, you're hit {player.health} health left")
+    for _ in range(enemyCount):
+        secretNumber = random.randint(1, 10)
+        print(f"{player.name}, attack this little enemy, fast (1-10)")
+
+        while enemy.isAlive() and player.isAlive():
+            playerGuess = validGuess()
+            if playerGuess != secretNumber:
+                player.health -= enemy.damage
+                print(f"Your guess was wrong, you're hit {player.health} health left")
+            else:
+                attackEnemy(player, enemy)
+                print("You killed that guy.\n")
+                break
 
 
 def attackBoss(player, enemy):
     secretNumber = random.randint(1, 50)
-    print(f"You have to fight against {enemy.name} (1-50)\n")
+    print(f"A Boss apeared, you have to fight against {enemy.name} (1-50)\n")
 
     while enemy.isAlive() and player.isAlive():
         playerGuess = validGuess()
@@ -99,15 +103,11 @@ def attackEnemy(player, enemy):
 
 def validGuess():
     while True:
-        userInput = input("Make your guess: ")
-        if userInput.isdigit():
-            return int(userInput)
-        elif userInput == "666":
-            print("You stay in hell")
-            exit()
-        else:
-            print("Unvalid input.\n")
-
+        try:
+            userInput = int(input("Make your guess: "))
+            return userInput
+        except ValueError:
+            print("Invalid input")
 
 if __name__ == "__main__":
     main()
